@@ -17,7 +17,7 @@ function playRound(playerChoice, computerChoice){
         resultText = `You Win! ${inputFormatting(playerChoice)} beats ${inputFormatting(computerChoice)}`;
         result = true; // True means player has won
     } else {
-        resultText = `You Lose! ${inputFormatting(playerChoice)} beats ${inputFormatting(computerChoice)}`;
+        resultText = `You Lose! ${inputFormatting(computerChoice)} beats ${inputFormatting(playerChoice)}`;
         result = false;
     }
 
@@ -107,10 +107,8 @@ console.log(playRound("s", "s")); //t
 // Working as intended, fine, continue with next step of the plan
 
 // Implement player controls
-function getPlayerChoice(){
-    let choice = "";
-    choice = prompt("Enter a value (r/rock, p/paper, s/scissors): ");
-    console.log(choice.trim().toLowerCase())
+function getPlayerChoice(chInput){
+    let choice = chInput;
 
     switch (choice.trim().toLowerCase()) {
         case "r":
@@ -130,33 +128,72 @@ function getPlayerChoice(){
     }
 }
 
-// Implement game session
-function game() {
-    let playerScore = 0;
-    let computerScore = 0;
-    let rounds = 5;
-    for (let i = 0; i < rounds; i++) {
-        let playerChoice = getPlayerChoice();
+function checkScore(playerScore, computerScore) {
+    if (playerScore >= 5 || computerScore >= 5) {
+        let winnerText = '';
+        // announce the winner
+        if (playerScore >= 5) {
+            winnerText = `Player wins (${playerScore}-${computerScore})`;
+        } else if (computerScore >= 5) {
+            winnerText = `Computer wins (${playerScore}-${computerScore})`;
+        }
+        // then hide the selections button and display the winner and the play button
+        resultsDisplay.textContent = winnerText;
+        play.style.display = 'block';
+        gameDiv.style.display = 'none';
+    }
+}
+
+// The main game function
+
+let playerScore;
+let computerScore;
+let round;
+let selection;
+
+const gameDiv = document.querySelector("#game");
+gameDiv.style.display = 'none';
+gameHistory = document.querySelector("#gameHistory");
+const resultsDisplay = document.querySelector("#results");
+const pScoreDisplay = document.querySelector("#playerScore");
+const cScoreDisplay = document.querySelector("#computerScore");
+const play = document.querySelector('#play');
+
+play.addEventListener('click', function(e) {
+    // hide the play button and display the selections
+    play.style.display = 'none';
+    gameDiv.style.display = 'block';
+    // reset the score
+    playerScore = 0;
+    computerScore = 0;
+    round = 0;
+    resultsDisplay.textContent = '';
+});
+
+
+const buttons = document.querySelectorAll(".selection");
+// Define button functions
+buttons.forEach((button) => {
+    // When the user clicks a button, the button will pass the selection to the game
+    button.addEventListener('click', function(e) {
+        round++;
+        let playerChoice = '';
+        selection = e.target.id;
+        playerChoice = getPlayerChoice(selection);
+        
         let [roundResult, resultText] = playRound(playerChoice, getComputerChoice());
         if (roundResult === true) {
             playerScore++;
         } else if (roundResult === false) {
             computerScore++;
-        } else {
-            playerScore++;
-            computerScore++;
         }
 
-        console.log(`Round ${i+1}: ${resultText} (${playerScore}-${computerScore})`);
-    }
-
-    // After 5 rounds
-    if (playerScore > computerScore) {
-        console.log(`Player wins (${playerScore}-${computerScore})`);
-    } else if (playerScore < computerScore) {
-        console.log(`Computer wins (${playerScore}-${computerScore})`);
-    } else {
-        console.log(`Game draws (${playerScore}-${computerScore})`);
-    }
-}
-
+        const pastGamesDisplay = document.createElement("p");
+        pastGamesDisplay.textContent = `(Round ${round}) ${resultText} (${playerScore} - ${computerScore})`;
+        gameHistory.prepend(pastGamesDisplay);
+        pScoreDisplay.textContent = playerScore;
+        cScoreDisplay.textContent = computerScore;
+        
+        checkScore(playerScore, computerScore);
+    });
+});

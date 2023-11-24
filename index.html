@@ -6,8 +6,18 @@
     <title>Rock paper scissors</title>
 </head>
 <body>
-    <p>Open up your console <kbd>F12</kbd></p>
-    <button onclick="game();">Play</button>
+    <h1>Rock Paper Scissors</h1>
+    <button id="play">Play</button>
+    <div id="game">
+        <p id="scoreboard">Player <span class="score" id="playerScore">0</span> - <span class="score" id="computerScore">0</span> Computer</p>
+        <div id="gameButtons">
+            <button class="selection" id="rock">Rock</button>
+            <button class="selection" id="paper">Paper</button>
+            <button class="selection" id="scissors">Scissors</button>
+        </div>
+        <p id="gameHistory"></p>
+    </div>
+    <p id="results"></p>
     <script src="main.js"></script>
 </body>
 </html>
