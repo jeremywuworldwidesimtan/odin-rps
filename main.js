@@ -128,20 +128,34 @@ function getPlayerChoice(chInput){
     }
 }
 
-function checkScore(playerScore, computerScore) {
-    if (playerScore >= 5 || computerScore >= 5) {
+// Check if anyone has scored a certain number of points or not
+// then stop the game if someone has gotten a specified score
+function checkScore(playerScore, computerScore, winScore) {
+    if (playerScore >= winScore || computerScore >= winScore) {
         let winnerText = '';
         // announce the winner
-        if (playerScore >= 5) {
-            winnerText = `Player wins (${playerScore}-${computerScore})`;
-        } else if (computerScore >= 5) {
+        if (playerScore >= winScore) {
+            winnerText = `${playerName} wins (${playerScore}-${computerScore})`;
+        } else if (computerScore >= winScore) {
             winnerText = `Computer wins (${playerScore}-${computerScore})`;
         }
         // then hide the selections button and display the winner and the play button
         resultsDisplay.textContent = winnerText;
         play.style.display = 'block';
+        usernameInput.style.display = 'block';
         gameDiv.style.display = 'none';
     }
+}
+
+// Debug
+function debug () {
+    gameDiv.style.display = 'flex';
+    const allP = document.querySelectorAll('p');
+    allP.forEach((p) => {
+        if (!p.textContent) {
+            p.textContent = "deebug!";
+        }
+    });
 }
 
 // The main game function
@@ -150,6 +164,7 @@ let playerScore;
 let computerScore;
 let round;
 let selection;
+let playerName;
 
 const gameDiv = document.querySelector("#game");
 gameDiv.style.display = 'none';
@@ -158,16 +173,24 @@ const resultsDisplay = document.querySelector("#results");
 const pScoreDisplay = document.querySelector("#playerScore");
 const cScoreDisplay = document.querySelector("#computerScore");
 const play = document.querySelector('#play');
+const usernameInput = document.querySelector("#name");
+const nameDisplay = document.querySelector("#playerName")
 
 play.addEventListener('click', function(e) {
     // hide the play button and display the selections
     play.style.display = 'none';
-    gameDiv.style.display = 'block';
+    usernameInput.style.display = 'none';
+    gameDiv.style.display = 'flex';
     // reset the score
     playerScore = 0;
     computerScore = 0;
     round = 0;
+    pScoreDisplay.textContent = playerScore;
+    cScoreDisplay.textContent = computerScore;
     resultsDisplay.textContent = '';
+    playerName = usernameInput.value;
+    if (!usernameInput.value) playerName = "Player";
+    nameDisplay.textContent = playerName;
 });
 
 
@@ -187,13 +210,11 @@ buttons.forEach((button) => {
         } else if (roundResult === false) {
             computerScore++;
         }
-
-        const pastGamesDisplay = document.createElement("p");
-        pastGamesDisplay.textContent = `(Round ${round}) ${resultText} (${playerScore} - ${computerScore})`;
-        gameHistory.prepend(pastGamesDisplay);
+        
+        gameHistory.textContent = `(Round ${round}) ${resultText} (${playerScore} - ${computerScore})`;
         pScoreDisplay.textContent = playerScore;
         cScoreDisplay.textContent = computerScore;
         
-        checkScore(playerScore, computerScore);
+        checkScore(playerScore, computerScore, 5);
     });
 });

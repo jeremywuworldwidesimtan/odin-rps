@@ -4,20 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock paper scissors</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Rock Paper Scissors</h1>
+    <input type="text" name="name" id="name" autocomplete="off" placeholder="Enter your name: (Leave empty for default)" size="30">
     <button id="play">Play</button>
     <div id="game">
-        <p id="scoreboard">Player <span class="score" id="playerScore">0</span> - <span class="score" id="computerScore">0</span> Computer</p>
+        <p id="scoreboard"><span id="playerName"></span> <span class="score" id="playerScore">0</span> - <span class="score" id="computerScore">0</span> Computer</p>
         <div id="gameButtons">
             <button class="selection" id="rock">Rock</button>
             <button class="selection" id="paper">Paper</button>
             <button class="selection" id="scissors">Scissors</button>
         </div>
-        <p id="gameHistory"></p>
     </div>
+    <p id="gameHistory"></p>
     <p id="results"></p>
+    <footer>
+        <div class="foot-row">
+            <p>A project by <a href="https://github.com/jeremywuworldwidesimtan">jeremywuworldwidesimtan</a> for <a href="https://www.theodinproject.com/">The Odin Project</a></p>
+            <p><a href="https://github.com/jeremywuworldwidesimtan/odin-rps">Source</a></p>
+        </div>
+        <p><strong>Need a refresher?</strong> Scissors beats paper, paper beats rock, rock beats scissors</p>
+    </footer>
     <script src="main.js"></script>
 </body>
 </html>
